@@ -1,18 +1,14 @@
 name: Deploy Backend API  # This is the name of your workflow.
-
 on:
   push:
     branches:
       - main  # This will trigger the action when you push to the "main" branch.
-
 jobs:
   deploy:
     runs-on: ubuntu-latest  # This means the job will run on a GitHub-hosted Ubuntu runner.
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3  # This checks out your code from the repo.
-
       - name: Set up SSH key
         run: |
           mkdir -p ~/.ssh  # Create the .ssh folder to store SSH keys.
@@ -23,17 +19,15 @@ jobs:
           chmod 600 ~/.ssh/id_rsa  # Secures the private key to make it readable by the SSH client.
           
           # This command adds the VM's IP to the known_hosts file to prevent SSH from asking to confirm the identity of the host.
-          ssh-keyscan 20.127.192.235 >> ~/.ssh/known_hosts  # **Update this IP to your VM’s IP**
-
+          ssh-keyscan 98.70.48.7 >> ~/.ssh/known_hosts  # Updated IP address
       - name: Copy files to VM
         run: |
           # This command copies your project files to the VM (assuming /home/azureuser is the desired directory).
-          scp -r ./ azureuser@20.127.192.235:/home/azureuser/backend-api  # **Update 'azureuser' if your VM username is different, and '20.127.192.235' to your VM's IP**
-
+          scp -r ./ azureuser@98.70.48.7:/home/azureuser/backend-api  # Updated IP address
       - name: Run app on VM
         run: |
           # This section SSHs into your VM and runs the backend app.
-          ssh azureuser@20.127.192.235 << 'EOF'
+          ssh azureuser@98.70.48.7 << 'EOF'  # Updated IP address
             cd /home/azureuser/backend-api  # Navigate to your backend directory on the VM.
             
             # Kill any process running on port 80 (e.g., old server) before starting the app.
